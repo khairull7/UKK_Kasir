@@ -23,7 +23,7 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login'); // Mengarahkan ke halaman login
+    return redirect()->route('login'); 
 });
 
 // Halaman Login
@@ -50,8 +50,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.updateStock');
     Route::get('/sales/{id}', [SaleController::class, 'show'])->name('sales.show');
     Route::get('/sales/{id}/pdf', [SaleController::class, 'downloadPdf'])->name('sales.pdf');
+    Route::get('/sales/export/excel', [SaleController::class, 'exportExcel'])->name('sales.export.excel');
 });
-
 
 // Petugas Routes
 Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
@@ -67,12 +67,8 @@ Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')
     Route::get('/sales/{id}/pdf', [SaleController::class, 'downloadPdf'])->name('sales.pdf');
     Route::get('/check-member', [SaleController::class, 'checkMember'])->name('sales.check-member');
     Route::get('/search-member', [CustomerController::class, 'searchByPhoneNumber']);
-
-
-
-
+    Route::get('/sales/export/excel', [SaleController::class, 'exportExcel'])->name('sales.export.excel');
 
 });
-
 
 

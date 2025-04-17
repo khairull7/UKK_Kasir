@@ -57,7 +57,7 @@
                     @foreach($sale->details as $detail)
                     <tr>
                         <td>{{ $detail->product->name }}</td>
-                        <td>{{ $detail->amount }}</td> <!-- Displaying quantity -->
+                        <td>{{ $detail->amount }}</td> 
                         <td>Rp {{ number_format($detail->product->price, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($detail->sub_total, 0, ',', '.') }}</td>
                     </tr>
@@ -65,6 +65,13 @@
                     <tr>
                         <th colspan="3" class="text-right">Total</th>
                         <th>Rp {{ number_format($sale->total_price, 0, ',', '.') }}</th>
+                    </tr>
+                        <th colspan="3" class="text-right">Total Bayar</th>
+                        <th>Rp {{ number_format($sale->total_pay, 0, ',', '.') }}</th>
+                    </tr>
+                    </tr>
+                        <th colspan="3" class="text-right">Total Kembalian</th>
+                        <th>Rp {{ number_format($sale->total_return, 0, ',', '.') }}</th>
                     </tr>
                 </tbody>
             </table>

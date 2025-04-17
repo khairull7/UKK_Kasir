@@ -4,13 +4,20 @@
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Daftar Pembelian</h1>
+    
     @if(Auth::user()->role == 'petugas')
 
     <a href="{{ route('petugas.sales.create') }}" class="btn btn-primary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Add Penjualan
     </a>
-    @endif
+    @endif 
+    <a href="{{route('petugas.sales.export.excel') }}" class="btn btn-success mb-3">
+        <i class="fas fa-file-excel mr-1"></i> Unduh Excel
+    </a> 
+
+    
 </div>
+
 
 <div class="card shadow mb-4">
     <div class="card-body">
@@ -30,7 +37,7 @@
                     @foreach($sales as $sale)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $sale->customer ? $sale->customer_name : 'Non-Member' }}</td>
+                        <td>{{ $sale->customer ? 'Member' : 'Non-Member' }}</td>
                         <td class="text-center">{{ $sale->created_at->format('Y-m-d') }}</td>
                         <td>Rp {{ number_format($sale->total_price, 0, ',', '.') }}</td>
                         <td>{{ $sale->staff->role ?? 'Role not assigned' }}</td>

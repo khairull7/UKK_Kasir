@@ -62,11 +62,10 @@
                         </div>
 
                         <div id="memberFields" class="form-group d-none">
-                    <label>No Telepon</label>
-                    <input type="text" name="no_telp" id="no_telp" class="form-control" oninput="searchMember()">
-                    <div id="member_name" class="mt-2"></div> <!-- Tempat menampilkan nama member -->
-                </div>
-
+                            <label>No Telepon</label>
+                            <input type="text" name="no_telp" id="no_telp" class="form-control" oninput="searchMember()">
+                            <div id="name" class="mt-2"></div> 
+                        </div>
 
                         <div class="form-group">
                             <label>Total Bayar</label>

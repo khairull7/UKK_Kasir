@@ -11,7 +11,7 @@
                 <div class="card shadow h-100">
                     <div class="card-body text-center">
                         @if($product->image)
-                            <img src="{{ asset('storage/'.$product->image) }}"
+                        <img src="{{ asset('storage/' . $product->image) }}"
                                  alt="{{ $product->name }}"
                                  class="img-fluid mb-3 rounded-lg"
                                  style="height: 150px; object-fit: contain;">
