@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class PetugasController extends Controller
 {
 
+
         public function index()
     {
         $totalSales = Sale::whereDate('sale_date', Carbon::now()->toDateString())->count();
@@ -19,5 +20,6 @@ class PetugasController extends Controller
         return view('petugas.dashboard', compact('totalSales', 'lastUpdated'));
     }
 
+   
 }
 

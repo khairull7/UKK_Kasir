@@ -16,6 +16,7 @@ class SaleController extends Controller
 {
     //
 
+    
     public function index()
     {
         // Memuat relasi 'customer' dengan penjualan
@@ -271,6 +272,5 @@ class SaleController extends Controller
 //     return redirect()->route('petugas.sales.payment', $sale->id)
 //         ->with('success', 'Transaksi berhasil. Poin member ditambahkan.');
 // }
-
 
 }

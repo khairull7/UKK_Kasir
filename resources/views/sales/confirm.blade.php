@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.app')
 
 @section('title', 'Konfirmasi Penjualan')
@@ -157,3 +158,5 @@
 </script>
 @endpush
 @endsection
+=======
+>>>>>>> a9114d1e3e5ccc5852d3f516047877fe62f192b5

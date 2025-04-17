@@ -10,15 +10,6 @@
     </a>
 </div>
 
-@if (session('success'))
-    <div class="alert alert-success border-0 shadow-sm alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> {{ session('success') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endif
-
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">

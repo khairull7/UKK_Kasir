@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class StaffMiddleware
+class PetugasMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class StaffMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->role !== 'staff') {
+        if (auth()->user()->role !== 'petugas') {
             abort(403, 'Unauthorized.');
         }
         return $next($request);

@@ -57,7 +57,6 @@
                 </div>
     
                 <!-- Nav Item - Produk -->
-                <!-- Nav Item - Produk -->
                 <li class="nav-item">
                     @if(auth()->user()->role == 'admin')
                         <a class="nav-link" href="{{ route('admin.products.index') }}">
@@ -73,19 +72,19 @@
                 </li>
 
                <!-- Nav Item - Pembelian -->
-                <li class="nav-item">
-                    @if(auth()->user()->role == 'admin')
-                    <a class="nav-link" href="{{route('admin.sales.index') }}">
-                            <i class="fas fa-fw fa-shopping-cart"></i>
-                            <span>Pembelian</span>
-                        </a>
-                    @elseif(auth()->user()->role == 'petugas')
-                        <a class="nav-link" href="{{route('petugas.sales.index') }}">
-                            <i class="fas fa-fw fa-shopping-cart"></i>
-                            <span>Pembelian</span>
-                        </a>
-                    @endif
-                </li>
+               <li class="nav-item">
+                @if(auth()->user()->role == 'admin')
+                <a class="nav-link" href="{{route('admin.sales.index') }}">
+                        <i class="fas fa-fw fa-shopping-cart"></i>
+                        <span>Pembelian</span>
+                    </a>
+                @elseif(auth()->user()->role == 'petugas')
+                    <a class="nav-link" href="{{route('petugas.sales.index') }}">
+                        <i class="fas fa-fw fa-shopping-cart"></i>
+                        <span>Pembelian</span>
+                    </a>
+                @endif
+             </li>
 
                 <!-- Nav Item - Pengguna -->
                 <li class="nav-item">
@@ -183,15 +182,6 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         {{ ucfirst(string: Auth::user()->role) }}
                                     </a>
-
-                                    <!-- <a class="dropdown-item" href="#">
-                                        <i class="fas fa-clock fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Last login: 
-                                        {{ Auth::user()->last_login_at 
-                                            ? \Carbon\Carbon::parse(Auth::user()->last_login_at)->diffForHumans() 
-                                            : 'Belum login' }}
-                                    </a> -->
-
 
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

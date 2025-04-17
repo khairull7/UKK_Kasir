@@ -66,10 +66,11 @@
                         <th colspan="3" class="text-right">Total</th>
                         <th>Rp {{ number_format($sale->total_price, 0, ',', '.') }}</th>
                     </tr>
+                    <tr>
                         <th colspan="3" class="text-right">Total Bayar</th>
                         <th>Rp {{ number_format($sale->total_pay, 0, ',', '.') }}</th>
                     </tr>
-                    </tr>
+                    <tr>
                         <th colspan="3" class="text-right">Total Kembalian</th>
                         <th>Rp {{ number_format($sale->total_return, 0, ',', '.') }}</th>
                     </tr>
