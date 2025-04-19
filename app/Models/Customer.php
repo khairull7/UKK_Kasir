@@ -10,22 +10,40 @@ class Customer extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'no_telp', 'poin'];
-    
+
+    /**
+     * Add points to the customer
+     * 
+     * @param int $points
+     * @return bool
+     */
+    public function addPoin($points)
+    {
+        $this->poin += $points;
+        return $this->save();
+    }
+
+    // /**
+    //  * Use points from customer balance
+    //  * 
+    //  * @param int $points
+    //  * @return bool
+    //  */
+    public function usePoin($points)
+    {
+        if ($this->poin < $points) {
+            return false;
+        }
+        
+        $this->poin -= $points;
+        return $this->save();
+    }
+
+    /**
+     * Get sales for this customer
+     */
     public function sales()
     {
         return $this->hasMany(Sale::class);
     }
-
-    public function usePoin($amount)
-{
-    $this->poin = max(0, $this->poin - $amount);
-    $this->save();
-}
-
-public function addPoin($amount)
-{
-    $this->poin += $amount;
-    $this->save();
-}
-
 }

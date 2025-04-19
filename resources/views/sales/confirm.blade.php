@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 @extends('layouts.app')
 
 @section('title', 'Konfirmasi Penjualan')
@@ -11,7 +10,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form id="payment_form" method="POST" action="{{ route('petugas.sales.store') }}">
+            <form id="payment_form" method="POST" action="{{ route('petugas.sales.member-info') }}">
                 @csrf
                 @foreach($selectedProducts as $product)
                     <input type="hidden" name="items[{{ $product['id'] }}][quantity]" value="{{ $product['quantity'] }}">
@@ -25,6 +24,8 @@
                 <input type="hidden" id="hidden_is_new_member" name="is_new_member" value="0">
                 <input type="hidden" id="hidden_used_poin" name="used_poin" value="0">
                 <input type="hidden" name="total_poin" value="{{ $customer->poin ?? 0 }}">
+
+                
                 
                 <div class="row">
                     <!-- Product Information -->
@@ -65,7 +66,7 @@
                         <div id="memberFields" class="form-group d-none">
                             <label>No Telepon</label>
                             <input type="text" name="no_telp" id="no_telp" class="form-control" oninput="searchMember()">
-                            <div id="name" class="mt-2"></div> 
+                            <div id="customer_name" class="mt-2"></div> 
                         </div>
 
                         <div class="form-group">
@@ -139,24 +140,24 @@
         document.getElementById('hidden_member_type').value = memberType;
         document.getElementById('hidden_phone_number').value = phoneNumber || '';
         document.getElementById('hidden_total_bayar').value = totalBayar.replace(/[^\d]/g, '');
-        document.getElementById('hidden_is_new_member').value = (memberType === 'member') ? 1 : 0;
-        document.getElementById('hidden_used_poin').value = 0;
 
+        // Pastikan jumlah bayar valid
+        const cleanValue = parseInt(totalBayar.replace(/[^\d]/g, '')) || 0;
+        const totalAmount = {{ $total }};
+        
+        if (cleanValue < totalAmount) {
+            alert('Jumlah bayar kurang dari total pembelian');
+            return;
+        }
 
+        // Pastikan nomor telepon diisi jika member
         if (memberType === 'member' && !phoneNumber) {
             alert('Mohon isi nomor telepon untuk member');
             return;
         }
 
-        if (!totalBayar) {
-            alert('Mohon isi total bayar');
-            return;
-        }
-
-        this.submit();
+        this.submit(); // Melakukan submit form ke halaman konfirmasi
     });
 </script>
 @endpush
 @endsection
-=======
->>>>>>> a9114d1e3e5ccc5852d3f516047877fe62f192b5

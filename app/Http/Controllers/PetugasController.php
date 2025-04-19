@@ -14,8 +14,8 @@ class PetugasController extends Controller
     {
         $totalSales = Sale::whereDate('sale_date', Carbon::now()->toDateString())->count();
         
-        $lastUpdatedSale = Sale::latest('sale_date')->first();
-        $lastUpdated = $lastUpdatedSale ? Carbon::parse($lastUpdatedSale->sale_date)->format('d M Y H:i') : '-';
+        $lastUpdatedSale = Sale::latest('created_at')->first();
+        $lastUpdated = $lastUpdatedSale ? Carbon::parse($lastUpdatedSale->created_at)->format('d M Y H:i') : '-';
 
         return view('petugas.dashboard', compact('totalSales', 'lastUpdated'));
     }

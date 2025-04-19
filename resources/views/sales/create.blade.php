@@ -6,13 +6,12 @@
     <h1 class="h3 mb-4 text-gray-800">Penjualan</h1>
 
     <div class="row">
-<<<<<<< HEAD
         @foreach ($products as $product)
             <div class="col-md-4 mb-4">
                 <div class="card shadow h-100">
                     <div class="card-body text-center">
                         @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}"
+                            <img src="{{ asset('storage/'.$product->image) }}"
                                  alt="{{ $product->name }}"
                                  class="img-fluid mb-3 rounded-lg"
                                  style="height: 150px; object-fit: contain;">
@@ -67,17 +66,101 @@
                 </div>
             </div>
         @endforeach
-=======
-   
->>>>>>> a9114d1e3e5ccc5852d3f516047877fe62f192b5
     </div>
 
-    <form id="salesForm" method="POST" action="#" class="mt-4">
+    <form id="salesForm" method="POST" action="{{ route('petugas.sales.confirm') }}" class="mt-4">
         @csrf
         <div id="selected-products"></div>
         <button type="submit" class="btn btn-primary px-5">Selanjutnya</button>
     </form>
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const formatCurrency = (number) => {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
+    const updateSubtotal = (id, quantity, price) => {
+        const qtyInput = document.getElementById(`qty-${id}`);
+        const plusBtn = document.querySelector(`.btn-plus[data-id="${id}"]`);
+        const minusBtn = document.querySelector(`.btn-minus[data-id="${id}"]`);
+        const stock = parseInt(plusBtn.dataset.stock);
+
+        // Update quantity
+        qtyInput.value = quantity;
+
+        // Calculate and update subtotal
+        const subtotal = price * quantity;
+        const subtotalEl = document.getElementById(`subtotal-${id}`);
+        subtotalEl.textContent = `Rp. ${formatCurrency(subtotal)}`;
+
+        // Handle hidden input for form
+        if (quantity > 0) {
+            let formInput = document.querySelector(`input[name="items[${id}][quantity]"]`);
+            if (!formInput) {
+                formInput = document.createElement('input');
+                formInput.type = 'hidden';
+                formInput.name = `items[${id}][quantity]`;
+                document.getElementById('selected-products').appendChild(formInput);
+            }
+            formInput.value = quantity;
+        } else {
+            const formInput = document.querySelector(`input[name="items[${id}][quantity]"]`);
+            if (formInput) formInput.remove();
+        }
+
+        // Update button states
+        plusBtn.disabled = quantity >= stock;
+        minusBtn.disabled = quantity <= 0;
+    };
+
+    // Plus button handler
+    document.querySelectorAll('.btn-plus').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            
+            const id = btn.dataset.id;
+            const stock = parseInt(btn.dataset.stock);
+            const price = parseInt(btn.dataset.price);
+            const currentQty = parseInt(document.getElementById(`qty-${id}`).value) || 0;
+
+            if (currentQty < stock) {
+                updateSubtotal(id, currentQty + 1, price);
+            }
+        });
+    });
+
+    // Minus button handler
+    document.querySelectorAll('.btn-minus').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            
+            const id = btn.dataset.id;
+            const price = parseInt(btn.dataset.price);
+            const currentQty = parseInt(document.getElementById(`qty-${id}`).value) || 0;
+
+            if (currentQty > 0) {
+                updateSubtotal(id, currentQty - 1, price);
+            }
+        });
+    });
+
+    // Form validation on submit
+    document.getElementById('salesForm').addEventListener('submit', function(e) {
+        const selectedProducts = document.querySelectorAll('input[name^="items"]');
+        if (selectedProducts.length === 0) {
+            e.preventDefault();
+            alert('Silahkan pilih minimal satu produk');
+            return;
+    }
+        this.method = 'POST';
+        this.action = "{{ route('petugas.sales.confirm') }}";
+        return true;
+    });
+});
+</script>
+@endpush
 
 @endsection

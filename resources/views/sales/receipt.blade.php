@@ -30,12 +30,12 @@
             <h2>Bukti Pembelian</h2>
         </div>
         <div style="text-align: right;">
-            <p><strong>Invoice:</strong></p>
-            <p><strong>Tanggal:</strong></p>
+            <p><strong>Invoice:</strong> #{{ $sale->id }}</p>
+            <p><strong>Tanggal:</strong> {{ $sale->created_at->format('d F Y H:i') }}</p>
         </div>
     </div>
 
-    <p><strong>Nama Pelanggan:</strong></p>
+    <p><strong>Nama Pelanggan:</strong> {{ $sale->customer->name ?? 'Non-Member' }}</p>
 
     <!-- Product Table -->
     <table>
@@ -48,7 +48,6 @@
             </tr>
         </thead>
         <tbody>
-<<<<<<< HEAD
             @foreach ($sale->details as $detail)
                 <tr>
                     <td>{{ $detail->product->name }}</td>
@@ -61,17 +60,6 @@
                 <th colspan="3">Total</th>
                 <th>Rp {{ number_format($sale->total_price, 0, ',', '.') }}</th>
             </tr>
-            <tr class="total-row">
-                <th colspan="3">Total Bayar</th>
-                <th>Rp {{ number_format($sale->total_pay, 0, ',', '.') }}</th>
-            </tr>
-            <tr class="total-row">
-                <th colspan="3">Total Kembalian</th>
-                <th>Rp {{ number_format($sale->total_return, 0, ',', '.') }}</th>
-            </tr>
-=======
-           
->>>>>>> a9114d1e3e5ccc5852d3f516047877fe62f192b5
         </tbody>
     </table>
 

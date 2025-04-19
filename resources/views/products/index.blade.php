@@ -4,13 +4,27 @@
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Daftar Produk</h1>
-    @if (auth()->user()->role === 'admin')
-        <a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm">
-            <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Tambah Produk
-        </a>
-    @endif
+    <div>
+        @if (auth()->user()->role === 'admin')
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Tambah Produk
+            </a>
+            <a href="{{ route('admin.products.export') }}" class="btn btn-success shadow-sm">
+                <i class="fas fa-file-excel fa-sm text-white-50 mr-1"></i> Export Produk
+            </a>
+        @endif
+    </div>
 </div>
 
+
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
 
 <div class="card shadow mb-4">
     <div class="card-body">

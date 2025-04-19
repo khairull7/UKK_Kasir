@@ -5,10 +5,24 @@
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Daftar Pengguna</h1>
-    <a href="{{ route('admin.users.create') }}" class="btn btn-primary shadow-sm">
-        <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Tambah User
-    </a>
+    <div>
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Tambah User
+        </a>
+        <a href="{{ route('admin.users.export') }}" class="btn btn-success shadow-sm">
+            <i class="fas fa-file-excel fa-sm text-white-50 mr-1"></i> Export Users
+        </a>
+    </div>
 </div>
+
+@if (session('success'))
+    <div class="alert alert-success border-0 shadow-sm alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
 
 <div class="card shadow mb-4">
     <div class="card-body">
@@ -31,6 +45,9 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ ucfirst($user->role) }}</td>
                             <td class="text-center">
+                                <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Lihat
+                                </a>
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>

@@ -23,4 +23,11 @@ class Sale extends Model
     public function details() {
          return $this->hasMany(DetailSale::class); 
     }
+    
+    public function payments()
+   {
+        return $this->hasMany(Payment::class);
+   }
+
+
 }
