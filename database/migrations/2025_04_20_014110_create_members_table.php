@@ -8,18 +8,19 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_produk');
-            $table->decimal('harga', 18, 2);
-            $table->integer('stok');
-            $table->string('img')->nullable();
+            $table->string('phone_number')->unique();
+            $table->string('name');
+            $table->integer('points')->default(0);
+            $table->date('member_since');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('members');
     }
+
 };

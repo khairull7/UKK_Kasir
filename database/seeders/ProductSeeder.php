@@ -10,14 +10,22 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create(); // Inisialisasi Faker
+        $faker = Faker::create(); 
+
+        $images = [
+            'template/img/produk1.png',
+            'template/img/produk2.png',
+            'template/img/produk3.png',
+            'template/img/produk4.png',
+            'template/img/produk5.png',
+        ];
 
         for ($i = 0; $i < 10; $i++) {
             Product::create([
-                'name' => $faker->word(), // Nama produk
-                'image' => 'https://via.placeholder.com/150', // Gambar produk, menggunakan placeholder
-                'price' => $faker->randomNumber(5, true), // Harga acak
-                'stock' => $faker->randomNumber(2), // Stok acak
+                'nama_produk' => ucfirst($faker->word()), 
+                'img' => $faker->randomElement($images), 
+                'harga' => $faker->numberBetween(10000,  99999),
+                'stok' => $faker->numberBetween(1, 50), 
             ]);
         }
     }

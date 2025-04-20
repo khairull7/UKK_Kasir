@@ -24,9 +24,9 @@ class ProductsExport implements FromCollection, WithHeadings, WithStyles, WithCo
 
         return $products->map(function ($product) {
             return [
-                'Nama' => $product->name,
-                'Harga' => 'Rp' . number_format($product->price, 0, ',', '.'),
-                'Stok' => $product->stock,
+                'Nama Produk' => $product->nama_produk,
+                'Harga' => 'Rp' . number_format($product->harga, 0, ',', '.'),
+                'Stok' => $product->stok,
             ];
         });
     }
@@ -34,7 +34,7 @@ class ProductsExport implements FromCollection, WithHeadings, WithStyles, WithCo
     public function headings(): array
     {
         return [
-            'Nama',
+            'Nama Produk',
             'Harga',
             'Stok',
         ];

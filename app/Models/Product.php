@@ -8,10 +8,30 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'price', 'stock', 'image'];
 
-    public function detailSales()
+    protected $fillable = [
+        'nama_produk',
+        'harga',
+        'stok',
+        'img'
+    ];
+
+    public function getImageUrlAttribute()
     {
-        return $this->hasMany(DetailSale::class);
+        if ($this->img) {
+            return asset('storage/' . $this->img);
+        }
+        return asset('img/default-product.png');
+    }
+    
+
+    public function getFormattedHargaAttribute()
+    {
+        return 'Rp ' . number_format($this->harga, 0, ',', '.');
+    }
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('stok', '>', 0);
     }
 }

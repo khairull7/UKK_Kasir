@@ -3,120 +3,107 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ProductsExport;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
-            if (!in_array(auth()->user()->role, ['admin', 'petugas'])) {
-                abort(403, 'Akses ditolak');
-            }
-            return $next($request);
-        });
-    }
-
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('search', '');
         
-        // Menyaring produk berdasarkan pencarian
-        if ($search) {
-            $products = Product::where('name', 'like', '%' . $search . '%')->get();
-        } else {
-            $products = Product::all();
-        }
-
-        return view('products.index', compact('products', 'search'));
+        $products = Product::when($search, function($query) use ($search) {
+                $query->where('nama_produk', 'like', '%' . $search . '%')
+                      ->orWhere('harga', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->paginate($perPage);
+        
+        return view('product.index', compact('products'));
     }
-
-    
 
     public function create()
     {
-        return view('products.create');
+        return view('product.create');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'nama_produk' => 'required|string|max:255',
+            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $imagePath = $request->file('image')->store('products', 'public');
+        if ($request->hasFile('img')) {
+            $imagePath = $request->file('img')->store('products', 'public');
+            $validated['img'] = $imagePath;
+        }
 
-        Product::create([
-            'name' => $validated['name'],
-            'image' => $imagePath,
-            'price' => $validated['price'],
-            'stock' => $validated['stock'],
-        ]);
+        Product::create($validated);
 
-        return redirect()->route(Auth::user()->role . '.products.index')->with('success', 'Produk berhasil ditambahkan.');
-    }
-
-    public function show(Product $product)
-    {
-        return view('products.show', compact('product'));
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
 
     public function edit(Product $product)
     {
-        return view('products.edit', compact('product'));
+        return view('product.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'price' => 'required|numeric',
+            'nama_produk' => 'required|string|max:255',
+            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-            $product->image = $imagePath;
+        if ($request->hasFile('img')) {
+            // Delete old image
+            if ($product->img) {
+                Storage::disk('public')->delete($product->img);
+            }
+            // Store new image
+            $imagePath = $request->file('img')->store('products', 'public');
+            $validated['img'] = $imagePath;
         }
 
-        $product->name = $validated['name'];
-        $product->price = $validated['price'];
-        $product->save();
+        $product->update($validated);
 
-        return redirect()->route(Auth::user()->role . '.products.index')->with('success', 'Produk berhasil diperbarui.');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     public function updateStock(Request $request, Product $product)
     {
-        // Validasi input
-        $validated = $request->validate([
-            'stock' => 'required|integer|min:0', // Validasi untuk stok
+        $request->validate([
+            'stok' => 'required|numeric|min:0'
         ]);
     
-        // Update stok produk
-        $product->stock = $validated['stock'];
-        $product->save();
+        $product->update([
+            'stok' => $request->stok
+        ]);
     
-        // Menyimpan pesan sukses di session dengan nama produk
-        return redirect()->route(Auth::user()->role . '.products.index')
-                         ->with('success', 'Stok produk "' . $product->name . '" berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Stock updated successfully');
     }
 
     public function destroy(Product $product)
     {
+        if ($product->img) {
+            Storage::disk('public')->delete($product->img);
+        }
         $product->delete();
-        return redirect()->route(Auth::user()->role . '.products.index')->with('success', 'Produk berhasil dihapus.');
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 
-    public function export()
+        public function export()
     {
         return Excel::download(new ProductsExport, 'products.xlsx');
     }
 }
+

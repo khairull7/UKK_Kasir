@@ -32,72 +32,48 @@
                 </a>
 
     
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
-    
-               <!-- Nav Item - Dashboard -->
-               <li class="nav-item">
-                    @if(auth()->user()->role === 'admin')
-                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                    @elseif(auth()->user()->role === 'petugas')
-                        <a class="nav-link" href="{{ route('petugas.dashboard') }}">
-                    @endif
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+                        <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
 
+                    <!-- Nav Item - Dashboard -->
+                    <li class="nav-item {{ Request::is('dashboard*') ? 'active' : '' }}">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-fw fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
 
-    
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-    
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Master
-                </div>
-    
-                <!-- Nav Item - Produk -->
-                <li class="nav-item">
-                    @if(auth()->user()->role == 'admin')
-                        <a class="nav-link" href="{{ route('admin.products.index') }}">
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
+
+                        <!-- Heading -->
+                        <div class="sidebar-heading">
+                            Master
+                        </div>
+
+                        <!-- Nav Item - Produk -->
+                    <li class="nav-item {{ Request::is('product*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('products.index') }}">
                             <i class="fas fa-fw fa-box"></i>
                             <span>Produk</span>
                         </a>
-                    @elseif(auth()->user()->role == 'petugas')
-                        <a class="nav-link" href="{{ route('petugas.products.index') }}">
-                            <i class="fas fa-fw fa-box"></i>
-                            <span>Produk</span>
+                    </li>
+
+                    <li class="nav-item {{ Request::is('pembelian*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pembelian.index') }}">
+                            <i class="fas fa-fw fa-shopping-cart"></i>
+                            <span>Penjualan</span>
                         </a>
-                    @endif
-                </li>
-
-               <!-- Nav Item - Pembelian -->
-               <li class="nav-item">
-                @if(auth()->user()->role == 'admin')
-                <a class="nav-link" href="{{route('admin.sales.index') }}">
-                        <i class="fas fa-fw fa-shopping-cart"></i>
-                        <span>Pembelian</span>
-                    </a>
-                @elseif(auth()->user()->role == 'petugas')
-                    <a class="nav-link" href="{{route('petugas.sales.index') }}">
-                        <i class="fas fa-fw fa-shopping-cart"></i>
-                        <span>Pembelian</span>
-                    </a>
-                @endif
-             </li>
-
-                <!-- Nav Item - Pengguna -->
-                <li class="nav-item">
-                    @if (auth()->user()->role == 'admin')
-                        <a class="nav-link" href="{{ route('admin.users.index') }}">
+                    </li>
+                    @if(Auth::user()->role == 'admin')
+                    <hr class="sidebar-divider">
+                    <li class="nav-item {{ Request::is('user*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('user.index') }}">
                             <i class="fas fa-fw fa-users"></i>
                             <span>Pengguna</span>
                         </a>
+                    </li>
                     @endif
-                </li>
-
-  
     
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
