@@ -18,19 +18,20 @@
                 <a href="{{ route('pembelian.export') }}" class="btn btn-success shadow-sm">
                     <i class="fas fa-file-excel fa-sm text-white-50 mr-1"></i> Export Excel
                 </a>
-                
 
                 <div class="d-flex align-items-center">
                     <span class="mr-2">Tampilkan</span>
                     <select id="per-page" class="form-control form-control-sm" style="width: auto;">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
+                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="75" {{ request('per_page') == 75 ? 'selected' : '' }}>75</option>
+                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
                     </select>
                     <span class="mx-2">entri</span>
 
                     <span class="mr-2">Cari:</span>
-                    <input type="text" id="search" class="form-control form-control-sm" style="width: 200px;" placeholder="Cari pembelian...">
+                    <input type="text" id="search" class="form-control form-control-sm" style="width: 200px;" placeholder="Cari pembelian..." value="{{ request('search') }}">
                 </div>
             </div>
 
@@ -49,16 +50,16 @@
                     <tbody>
                         @forelse($pembelians as $index => $pembelian)
                             <tr>
-                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td class="text-center">{{ ($pembelians->currentPage() - 1) * $pembelians->perPage() + $index + 1 }}</td>
                                 <td>{{ $pembelian->customer_name }}</td>
                                 <td class="text-center">{{ $pembelian->tanggal }}</td>
                                 <td>Rp {{ number_format($pembelian->grand_total, 0, ',', '.') }}</td>
                                 <td>{{ $pembelian->dibuat_oleh }}</td>
                                 <td class="text-center">
-                                    <a href="#" onclick="showDetail({{ $pembelian->id }})" class="btn btn-info btn-sm">
+                                    <a href="#" onclick="showDetail({{ $pembelian->id }})" class="btn btn-warning btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('pembelian.export_pdf', $pembelian->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('pembelian.export_pdf', $pembelian->id) }}" class="btn btn-danger btn-sm">
                                         <i class="fas fa-download"></i>
                                     </a>
                                 </td>
@@ -73,7 +74,7 @@
             </div>
 
             <div class="mt-4">
-                {{ $pembelians->links('pagination::bootstrap-4') }}
+                {{ $pembelians->appends(request()->query())->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -104,16 +105,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const perPageSelect = document.getElementById('per-page');
     let typingTimer;
 
+    function updatePage() {
+        const search = searchInput.value;
+        const perPage = perPageSelect.value;
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('search', search);
+        url.searchParams.set('per_page', perPage);
+
+        window.location.href = url.toString();
+    }
+
     searchInput.addEventListener('keyup', function() {
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(() => {
-            // Add your search functionality here
-        }, 500);
+        typingTimer = setTimeout(updatePage, 500);
     });
 
-    perPageSelect.addEventListener('change', function() {
-        // Add your per-page change functionality here
-    });
+    perPageSelect.addEventListener('change', updatePage);
 });
 </script>
 @endpush

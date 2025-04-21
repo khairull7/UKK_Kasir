@@ -180,6 +180,21 @@
                     <td class="text-right">Rp {{ number_format($pembelian->grand_total, 0, ',', '.') }}</td>
                 </tr>
             </tfoot>
+            @if($pembelian->pembayaran)
+            <tr>
+                <td colspan="3" class="text-right">Total Bayar</td>
+                <td class="text-right">Rp {{ number_format($pembelian->pembayaran->jumlah_bayar, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">Kembalian</td>
+                <td class="text-right">Rp {{ number_format($pembelian->pembayaran->kembalian, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">Metode Pembayaran</td>
+                <td class="text-right">{{ ucfirst($pembelian->pembayaran->metode_pembayaran) }}</td>
+            </tr>
+            @endif
+
         </table>
 
         <!-- Footer Section -->

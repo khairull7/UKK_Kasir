@@ -23,16 +23,15 @@
             <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     
-                <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="sidebar-brand-text mx-3">Kasir<sup>Pro</sup></div>
-                </a>
+                    <!-- Sidebar - Brand -->
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                        <div class="sidebar-brand-icon rotate">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3">Kasir<sup>Pro</sup></div>
+                    </a>
 
-    
-                        <!-- Divider -->
+                    <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
@@ -44,12 +43,12 @@
                     </li>
 
                         <!-- Divider -->
-                        <hr class="sidebar-divider">
+                    <hr class="sidebar-divider">
 
                         <!-- Heading -->
-                        <div class="sidebar-heading">
-                            Master
-                        </div>
+                    <div class="sidebar-heading">
+                        Master
+                    </div>
 
                         <!-- Nav Item - Produk -->
                     <li class="nav-item {{ Request::is('product*') ? 'active' : '' }}">
@@ -61,7 +60,7 @@
 
                     <li class="nav-item {{ Request::is('pembelian*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('pembelian.index') }}">
-                            <i class="fas fa-fw fa-shopping-cart"></i>
+                            <i class="fas fa-fw fa-cart-plus"></i> 
                             <span>Penjualan</span>
                         </a>
                     </li>
@@ -147,7 +146,11 @@
                             <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img class="img-profile rounded-circle" src="{{ asset('template/img/undraw_profile.svg') }}">
+                                <span class="img-profile rounded-circle d-flex justify-content-center align-items-center mr-2" 
+                                    style="background-color: #4e73df; color: white; width: 40px; height: 40px; font-size: 18px;">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </span>
+                                    <!-- <img class="img-profile rounded-circle" src="{{ asset(path: 'template/img/undraw_profile.svg') }}"> -->
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                         {{ ucfirst(Auth::user()->name) }}
                                     </span>

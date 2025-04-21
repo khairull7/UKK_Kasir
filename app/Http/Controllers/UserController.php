@@ -39,7 +39,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('user.index')
-            ->with('success', 'User successfully added');
+            ->with('success', 'Pengguna berhasil ditambahkan');
     }
 
     public function show(User $user)
@@ -76,14 +76,14 @@ class UserController extends Controller
         $user->update($data);
 
         return redirect()->route('user.index')
-            ->with('success', 'User successfully updated');
+            ->with('success', 'Data pengguna berhasil diperbarui');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('user.index')
-            ->with('success', 'User successfully deleted');
+            ->with('success', 'Pengguna berhasil dihapus');
     }
 
     public function export()

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PembeliansExport;
+use Illuminate\Support\Facades\Auth;
 
 class PembelianController extends Controller
 {
@@ -20,22 +21,17 @@ class PembelianController extends Controller
             ->select('id', 'customer_name', 'tanggal', 'grand_total', 'dibuat_oleh', 'invoice_number')
             ->orderBy('created_at', 'desc');
 
-        // Search functionality
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search != '') {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('customer_name', 'like', "%{$searchTerm}%")
-                  ->orWhere('invoice_number', 'like', "%{$searchTerm}%")
-                  ->orWhere('dibuat_oleh', 'like', "%{$searchTerm}%");
-            });
+            $query->where('customer_name', 'like', "%{$searchTerm}%");
         }
 
-        // Per page setting
         $perPage = $request->get('per_page', 10);
         $pembelians = $query->paginate($perPage);
 
         return view('pembelian.index', compact('pembelians'));
     }
+
 
     public function create()
     {
@@ -66,10 +62,9 @@ class PembelianController extends Controller
                 'invoice_number' => 'INV-' . date('Ymd') . '-' . rand(1000, 9999),
                 'grand_total' => $total_price,
                 'tanggal' => now(),
-                'dibuat_oleh' => 'Petugas'
+                'dibuat_oleh' => Auth::user()->name
             ]);
         
-            // Create detail record
             DetailPembelian::create([
                 'pembelian_id' => $pembelian->id,
                 'id_produk' => $request->product_id,
@@ -91,7 +86,7 @@ class PembelianController extends Controller
 
     public function detail(Pembelians $pembelian)
     {
-        $pembelian->load(['details.product']);
+        $pembelian->load(['details.product', 'pembayaran']);
         
         if ($pembelian->customer_name !== 'Non Member') {
             $member = Member::where('name', $pembelian->customer_name)->first();
@@ -175,7 +170,7 @@ class PembelianController extends Controller
             'phone_number' => $request->phone_number,
             'points' => $points,
             'memberName' => $memberName,
-            'existingPoints' => $existingPoints,  // Pastikan data poin diteruskan
+            'existingPoints' => $existingPoints, 
             'isNewMember' => $isNewMember
         ]);
     }
@@ -187,7 +182,6 @@ class PembelianController extends Controller
         $total = $request->total_amount;
         $total_bayar = $request->total_bayar;
         
-        // Handle member data
         $member = null;
         $points_earned = 0;
         $points_used = 0;
@@ -246,7 +240,7 @@ class PembelianController extends Controller
             'customer_name' => $member ? $member->name : 'Non Member',
             'grand_total' => $final_total,
             'tanggal' => now(),
-            'dibuat_oleh' => 'Petugas',
+            'dibuat_oleh' => Auth::user()->name,
             'is_member' => $member ? true : false,
             'member_id' => $member ? $member->id : null,
             'poin_digunakan' => $points_used
@@ -301,7 +295,7 @@ class PembelianController extends Controller
             'customer_name' => 'Non Member',
             'grand_total' => $total,
             'tanggal' => now(),
-            'dibuat_oleh' => 'Petugas',
+            'dibuat_oleh' => Auth::user()->name,
             'is_member' => false
         ]);
 
@@ -360,7 +354,7 @@ class PembelianController extends Controller
 
     public function exportToPDF($id)
     {
-        $pembelian = Pembelians::with(['details.product'])->findOrFail($id);
+    $pembelian = Pembelians::with(['details.product', 'pembayaran'])->findOrFail($id);
         $member = Member::where('name', $pembelian->customer_name)->first();
 
         $data = [

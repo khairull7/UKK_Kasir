@@ -46,7 +46,7 @@ class ProductController extends Controller
 
         Product::create($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        return redirect()->route('products.index')->with('success', 'Produck berhasil ditambahkan!');
     }
 
     public function edit(Product $product)
@@ -64,18 +64,16 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('img')) {
-            // Delete old image
             if ($product->img) {
                 Storage::disk('public')->delete($product->img);
             }
-            // Store new image
             $imagePath = $request->file('img')->store('products', 'public');
             $validated['img'] = $imagePath;
         }
 
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
     public function updateStock(Request $request, Product $product)
@@ -88,7 +86,7 @@ class ProductController extends Controller
             'stok' => $request->stok
         ]);
     
-        return redirect()->back()->with('success', 'Stock updated successfully');
+        return redirect()->back()->with('success', 'Stok berhasil diperbarui');
     }
 
     public function destroy(Product $product)
@@ -98,7 +96,7 @@ class ProductController extends Controller
         }
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
     }
 
         public function export()

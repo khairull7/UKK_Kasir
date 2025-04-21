@@ -19,11 +19,8 @@
         <link href="{{ asset('template/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
     </head>
-
     <body class="bg-gradient-primary">
-
         <div class="container">
-
             <!-- Outer Row -->
             <div class="row justify-content-center align-items-center min-vh-100">
                 <div class="col-xl-10 col-lg-12 col-md-9">
@@ -41,17 +38,11 @@
                                             <h1 class="h4 text-gray-900 mb-4">Welcome to KasirPro!</h1>
                                         </div>
 
-                                        <!-- Error Messages -->
-                                        @if ($errors->any())
-                                            <div class="alert alert-danger">
-                                                <ul class="mb-0">
-                                                    @foreach ($errors->all() as $error)
-                                                        <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endif
-
+                                    @if (session('error'))
+                                        <div class="alert alert-danger">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
                                         <!-- Login Form -->
                                         <form class="user" method="POST" action="{{ route('login') }}">
                                             @csrf
@@ -80,7 +71,6 @@
             </div>
 
         </div>
-
         <!-- Bootstrap core JavaScript-->
         <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

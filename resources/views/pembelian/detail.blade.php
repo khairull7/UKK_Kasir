@@ -1,124 +1,102 @@
-<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5)">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content shadow-lg">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-weight-bold">
-                    <i class="fas fa-receipt mr-2"></i>Detail Penjualan
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(30, 30, 30, 0.7); font-family: 'Open Sans', sans-serif;">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+            <div class="modal-header bg-white border-bottom-0 py-4 px-5">
+                <h5 class="modal-title text-dark fw-bold">
+                    <i class="fas fa-receipt me-2 text-primary"></i> Rincian Transaksi
                 </h5>
-                <a href="{{ route('pembelian.index') }}" class="close text-white">
-                    <span aria-hidden="true">&times;</span>
+                <a href="{{ route('pembelian.index') }}" class="btn btn-sm btn-outline-secondary rounded-circle">
+                    <i class="fas fa-times"></i>
                 </a>
             </div>
 
-            <div class="modal-body">
-                <!-- Dual Column Layout -->
-                <div class="row mb-4">
-                    <!-- Informasi Pelanggan (Left) -->
-                    <div class="col-md-6 pr-md-2">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title text-primary mb-3">
-                                    <i class="fas fa-user-circle mr-2"></i>Informasi Pelanggan
-                                </h6>
-                                
-                                @php
-                                    $member = \App\Models\Member::where('name', $pembelian->customer_name)->first();
-                                @endphp
-                                
+            <div class="modal-body bg-light px-5 pt-4 pb-0">
+                <div class="row g-4">
+                    <!-- Informasi Pelanggan -->
+                    <div class="col-md-6">
+                        <div class="bg-white rounded-3 shadow-sm p-4 h-100">
+                            <h6 class="mb-3 text-primary"><i class="fas fa-user me-2"></i> Data Pelanggan</h6>
+                            @php
+                                $member = \App\Models\Member::where('name', $pembelian->customer_name)->first();
+                            @endphp
+                            <ul class="list-unstyled small mb-0">
+                                <li class="mb-2"><strong>Status:</strong>
+                                    @if($member)
+                                        <span class="badge bg-success">Member</span>
+                                    @else
+                                        <span class="badge bg-secondary">Bukan Member</span>
+                                    @endif
+                                </li>
+                                <li class="mb-2"><strong>Nama:</strong> {{ $pembelian->customer_name ?? '-' }}</li>
                                 @if($member)
-                                    <p class="mb-2">
-                                        <span class="font-weight-bold">Status:</span> 
-                                        <span class="badge badge-success">Member</span>
-                                    </p>
-                                    <p class="mb-2">
-                                        <span class="font-weight-bold">Nama:</span> 
-                                        {{ $pembelian->customer_name }}
-                                    </p>
-                                    <p class="mb-2">
-                                        <span class="font-weight-bold">No. HP:</span> 
-                                        {{ $member->phone_number }}
-                                    </p>
-                                    <p class="mb-2">
-                                        <span class="font-weight-bold">Poin:</span> 
-                                        <span class="badge badge-info">{{ $member->points }} Poin</span>
-                                    </p>
-                                    <p class="mb-0">
-                                        <span class="font-weight-bold">Member Sejak:</span> 
-                                        {{ \Carbon\Carbon::parse($member->member_since)->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}
-                                    </p>
+                                    <li class="mb-2"><strong>No. HP:</strong> {{ $member->phone_number }}</li>
+                                    <li class="mb-2"><strong>Poin:</strong> <span class="badge bg-info text-white">{{ $member->points }} Poin</span></li>
+                                    <li><strong>Member Sejak:</strong> {{ \Carbon\Carbon::parse($member->member_since)->translatedFormat('d F Y') }}</li>
                                 @else
-                                    <p class="mb-2">
-                                        <span class="font-weight-bold">Status:</span> 
-                                        <span class="badge badge-secondary">Bukan Member</span>
-                                    </p>
-                                    <p class="mb-2">
-                                        <span class="font-weight-bold">Nama:</span> 
-                                        {{ $pembelian->customer_name ?? '-' }}
-                                    </p>
-                                    <p class="mb-0 text-muted">Tidak terdaftar sebagai member</p>
+                                    <li class="text-muted">Tidak terdaftar sebagai member.</li>
                                 @endif
-                            </div>
+                            </ul>
                         </div>
                     </div>
 
-                    <!-- Informasi Transaksi (Right) -->
-                    <div class="col-md-6 pl-md-2">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title text-primary mb-3">
-                                    <i class="fas fa-info-circle mr-2"></i>Informasi Transaksi
-                                </h6>
-                                <p class="mb-2">
-                                    <span class="font-weight-bold">Tanggal:</span> 
-                                    {{ $pembelian->created_at->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}
-                                </p>
-                                <p class="mb-2">
-                                    <span class="font-weight-bold">Waktu:</span> 
-                                    {{ $pembelian->created_at->format('H:i') }} WIB
-                                </p>
-                                <p class="mb-0">
-                                    <span class="font-weight-bold">Kasir:</span> 
-                                    {{ $pembelian->dibuat_oleh }}
-                                </p>
-                            </div>
+                    <!-- Informasi Transaksi -->
+                    <div class="col-md-6">
+                        <div class="bg-white rounded-3 shadow-sm p-4 h-100">
+                            <h6 class="mb-3 text-primary"><i class="fas fa-info-circle me-2"></i> Informasi Transaksi</h6>
+                            <ul class="list-unstyled small mb-0">
+                                <li class="mb-2"><strong>Tanggal:</strong> {{ $pembelian->created_at->translatedFormat('d F Y') }}</li>
+                                <li class="mb-2"><strong>Waktu:</strong> {{ $pembelian->created_at->format('H:i') }} WIB</li>
+                                <li><strong>Kasir:</strong> {{ $pembelian->dibuat_oleh }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Order Items Section (Full Width Below) -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body p-0">
-                        <h6 class="card-title bg-light p-3 mb-0 text-primary">
-                            <i class="fas fa-shopping-basket mr-2"></i>Detail Pembelian
-                        </h6>
-                        
+                <!-- Detail Pembelian -->
+                <div class="mt-5">
+                    <div class="bg-white rounded-3 shadow-sm p-0">
+                        <div class="px-4 py-3 border-bottom bg-primary text-white rounded-top">
+                            <i class="fas fa-shopping-basket me-2"></i> Detail Pembelian
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                            <table class="table mb-0 align-middle">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="text-left">Produk</th>
+                                        <th>Produk</th>
                                         <th class="text-center">Qty</th>
-                                        <th class="text-right">Harga Satuan</th>
-                                        <th class="text-right">Subtotal</th>
+                                        <th class="text-end">Harga</th>
+                                        <th class="text-end">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($pembelian->details as $detail)
-                                    <tr>
-                                        <td class="align-middle">{{ $detail->product->nama_produk }}</td>
-                                        <td class="text-center align-middle">{{ $detail->quantity }}</td>
-                                        <td class="text-right align-middle">Rp {{ number_format($detail->product->harga, 0, ',', '.') }}</td>
-                                        <td class="text-right align-middle font-weight-bold">Rp {{ number_format($detail->total_price, 0, ',', '.') }}</td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $detail->product->nama_produk }}</td>
+                                            <td class="text-center">{{ $detail->quantity }}</td>
+                                            <td class="text-end">Rp {{ number_format($detail->product->harga, 0, ',', '.') }}</td>
+                                            <td class="text-end fw-bold">Rp {{ number_format($detail->total_price, 0, ',', '.') }}</td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot class="bg-light">
                                     <tr>
-                                        <td colspan="3" class="text-right font-weight-bold py-3">Total Pembelian</td>
-                                        <td class="text-right font-weight-bold py-3 text-primary">
-                                            Rp {{ number_format($pembelian->grand_total, 0, ',', '.') }}
-                                        </td>
+                                        <td colspan="3" class="text-end fw-bold">Total Pembelian</td>
+                                        <td class="text-end fw-bold text-primary">Rp {{ number_format($pembelian->grand_total, 0, ',', '.') }}</td>
                                     </tr>
+                                    @if($pembelian->pembayaran)
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Total Bayar</td>
+                                            <td class="text-end text-success fw-bold">Rp {{ number_format($pembelian->pembayaran->jumlah_bayar, 0, ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Kembalian</td>
+                                            <td class="text-end text-danger fw-bold">Rp {{ number_format($pembelian->pembayaran->kembalian, 0, ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Metode Pembayaran</td>
+                                            <td class="text-end">{{ ucfirst($pembelian->pembayaran->metode_pembayaran) }}</td>
+                                        </tr>
+                                    @endif
                                 </tfoot>
                             </table>
                         </div>
@@ -126,9 +104,9 @@
                 </div>
             </div>
 
-            <div class="modal-footer bg-light">
-                <a href="{{ route('pembelian.index') }}" class="btn btn-primary px-4">
-                    <i class="fas fa-times mr-2"></i>Tutup
+            <div class="modal-footer bg-white px-5 py-3">
+                <a href="{{ route('pembelian.index') }}" class="btn btn-outline-primary px-4">
+                    <i class="fas fa-arrow-left me-2"></i> Kembali
                 </a>
             </div>
         </div>

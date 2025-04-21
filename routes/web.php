@@ -41,7 +41,8 @@ Route::middleware(['auth'])->group(function () {
 
     //User
     Route::middleware(['admin'])->group(function () {
-        Route::resource('users', controller: UserController::class);
+        Route::get('/users/export', [UserController::class, 'export'])->name(name: 'user.export');
+
         Route::get('/users', [UserController::class, 'index'])->name('user.index');
         Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
         Route::post('/users', [UserController::class, 'store'])->name('user.store');
@@ -49,7 +50,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-        Route::get('/users/export', [UserController::class, 'export'])->name('user.export');
     });
     //Product
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');

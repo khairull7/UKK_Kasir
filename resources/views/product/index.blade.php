@@ -14,8 +14,16 @@
             </a>
         </div>
     @endif
-
 </div>
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
 
 <div class="card shadow mb-4">
     <div class="card-body">
@@ -27,7 +35,8 @@
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
-                    <option value="75">70</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
                 </select>
                 <span class="mx-2">entri</span>
 
@@ -41,8 +50,8 @@
                 <thead>
                     <tr class="text-center">
                         <th>#</th>
-                        <th>Gambar Produk</th>
                         <th>Nama Produk</th>
+                        <th>Gambar Produk</th>
                         <th>Harga</th>
                         <th>Stok</th>
                         @if(Auth::user()->role == 'admin')
@@ -54,6 +63,7 @@
                     @forelse($products as $product)
                     <tr class="text-center align-middle">
                         <td class="align-middle">{{ $loop->iteration }}</td>
+                        <td class="align-middle">{{ $product->nama_produk }}</td>
                         <td class="align-middle">
                             @if($product->img)
                                 <img src="{{ asset('storage/'.$product->img) }}" 
@@ -67,7 +77,6 @@
                                     style="width: 70px; height: 70px; object-fit: cover;">
                             @endif
                         </td>
-                        <td class="align-middle">{{ $product->nama_produk }}</td>
                         <td class="align-middle">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
                         <td class="align-middle text-lg">
                             <span class="{{ $product->stok < 10 ? 'badge text-danger' : 'badge text-primary' }}">

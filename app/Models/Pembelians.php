@@ -46,4 +46,10 @@ class Pembelians extends Model
     {
         return $this->belongsTo(Pembelians::class);
     }
+
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'pembelian_id');
+    }
+
 }
